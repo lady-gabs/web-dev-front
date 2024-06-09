@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Montserrat&display=swap');
+
+button {
+    width: 150px;
+    padding: 10px;
+
+    border: 0;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+
+    background: #03A9F4;
+    
+    color: rgb(255, 255, 255);
+
+    cursor: pointer;
+
+    transition: all .3s;
+
+    &:hover {
+        background-color: #03A9F4;
+    }
+}

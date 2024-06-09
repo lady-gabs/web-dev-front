@@ -1,0 +1,46 @@
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 82px;
+  left: 0;
+  background-color: #F4F4F4;
+  padding-top: 20px;
+  z-index: 999;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 8px;
+  border-bottom: 1px solid #cccaca; /* Adiciona a linha de divisão */
+  transition: background-color 0.3s; /* Adiciona uma transição suave */
+}
+
+.sidebar ul li:last-child {
+  border-bottom: none; /* Remove a linha do último item */
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: black;
+  display: block;
+}
+
+.sidebar ul li:hover {
+  background-color: #008CC5; /* Cor de fundo ao passar o mouse */
+}
+
+.sidebar ul li:hover a {
+  color: white; /* Cor do texto ao passar o mouse */
+}
+
+.selected {
+  background-color: #008CC5; /* Cor de fundo para o item selecionado */
+  color: white; /* Cor do texto para o item selecionado */
+}
+
