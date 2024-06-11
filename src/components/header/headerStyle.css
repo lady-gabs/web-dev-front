@@ -8,5 +8,9 @@
     color: #fff;
     background: linear-gradient(90deg, rgba(5,9,46,1) 69%, rgba(10,19,94,1) 95%, rgba(15,28,136,1) 100%);
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+}
+button {
+    background: transparent;
+    border: none;
 }

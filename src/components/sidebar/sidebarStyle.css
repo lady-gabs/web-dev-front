@@ -1,4 +1,4 @@
-.sidebar {
+#sidebar {
   height: 100%;
   width: 250px;
   position: fixed;
@@ -7,40 +7,51 @@
   background-color: #F4F4F4;
   padding-top: 20px;
   z-index: 999;
+  transition: 0.5s cubic-bezier(.36,-0.01,0,.77);
 }
 
-.sidebar ul {
+#sidebar ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.sidebar ul li {
+#sidebar ul li {
   padding: 8px;
   border-bottom: 1px solid #cccaca; /* Adiciona a linha de divisão */
   transition: background-color 0.3s; /* Adiciona uma transição suave */
 }
 
-.sidebar ul li:last-child {
+#sidebar ul li:last-child {
   border-bottom: none; /* Remove a linha do último item */
 }
 
-.sidebar ul li a {
+#sidebar ul li.selected a {
+  color: white !important; /* Cor do texto para o item selecionado */
+}
+#sidebar ul li a {
   text-decoration: none;
   color: black;
   display: block;
 }
 
-.sidebar ul li:hover {
-  background-color: #008CC5; /* Cor de fundo ao passar o mouse */
+#sidebar ul li:hover {
+  background-color: rgba(10,19,94,1); /* Cor de fundo ao passar o mouse */
 }
 
-.sidebar ul li:hover a {
+#sidebar ul li:hover a {
   color: white; /* Cor do texto ao passar o mouse */
 }
-
 .selected {
-  background-color: #008CC5; /* Cor de fundo para o item selecionado */
-  color: white; /* Cor do texto para o item selecionado */
+  background-color: rgba(10,19,94,1); /* Cor de fundo para o item selecionado */
 }
-
+.btn-sidebar {
+  position: absolute;
+  top: 3%;
+}
+.closed {
+  margin-left: -500px;
+}
+.active {
+  margin-left: 0px;
+}
