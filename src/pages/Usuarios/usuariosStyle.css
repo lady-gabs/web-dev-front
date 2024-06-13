@@ -1,0 +1,14 @@
+
+.table {
+    transition: margin-left 0.3s;
+    position: absolute;
+    top: 80px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 95% !important;
+}
+
+.with-sidebar {
+    margin-left: 255px; /* Ajuste conforme o tamanho da barra lateral */
+    width: 80% !important;
+}
