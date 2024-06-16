@@ -22,7 +22,7 @@ function Login({ setAuthState }) {
 
         // Requisição para o backend
         try {
-            const response = await fetch('http://localhost:8080/api/login', {
+            const response = await fetch('http://localhost:8080/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,13 +38,14 @@ function Login({ setAuthState }) {
 
                 // Decodifica o token para extrair o role
                 const decodedToken = jwtDecode(token);
-                const userType = decodedToken.role; // Supondo que o role está no payload do token
+                const userRoles = decodedToken.role; // Supondo que as roles estão no payload do token
+                const userType = userRoles.includes('ROLE_ADMIN') ? 'admin' : 'client';
 
                 // Sucesso na autenticação
                 setAuthState({ isAuthenticated: true, userType: userType });
-                if (userType === 'admin') {
+                if (userType === '0') {
                     navigate('/admin');
-                } else if (userType === 'client') {
+                } else if (userType === '1') {
                     navigate('/client');
                 } else {
                     setError('Tipo de usuário desconhecido.');
