@@ -34,7 +34,7 @@ export default function Usuarios() {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `${token}`,
         },
       });
 

@@ -36,7 +36,8 @@ function Login({ setAuthState }) {
                 // Armazena o token em localStorage (ou sessionStorage)
                 localStorage.setItem('token', token);
                 console.log(role)
- 
+                
+                setAuthState({ isAuthenticated: true, userType: role})
                 if (role === 'ADMIN') {
                     navigate('/admin');
                 } else if (role === 'USER') {
