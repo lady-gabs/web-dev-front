@@ -1,39 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Paper from '@mui/material/Paper';
 import './estoqueStyle.css';
 import { SidebarContext } from '../../components/sidebar/SidebarContext.js';
-
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
 
 export default function Estoque() {
   const { isSidebarActive } = useContext(SidebarContext);
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
-  
-  const fetchProdutos = async () => {
+
+  const fetchEstoque = async () => {
     const token = localStorage.getItem('token');
     try {
       const response = await fetch('http://localhost:8080/estoque', {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `${token}`,
         },
       });
@@ -55,61 +35,58 @@ export default function Estoque() {
       setError('Erro na requisição');
     }
   };
+
   useEffect(() => {
-    fetchProdutos();
+    fetchEstoque();
   }, []);
+
+  const deleteStock = () => {
+    console.log("Deleted");
+  }
+
+  const renderCellContent = (content) => {
+    if (typeof content === 'object' && content !== null) {
+      return JSON.stringify(content);
+    }
+    return content;
+  };
+
   return (
-    <div className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
-        <h2>Estoque</h2>
-        {/* <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-            <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            </TableRow>
-            </TableHead>
-            <TableBody>
-            {rows.map((row) => (
-                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">{row.name}</TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                </TableRow>
-            ))}
-            </TableBody>
-        </Table>
-        </TableContainer> */}
-        <div>
-          {error && <p>{error}</p>}
-          {data.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  {columns.map((column, index) => (
-                    <th key={index}>{column}</th>
+    <div id='div-estoque' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
+      <h2>Estoque</h2>
+      <div>
+        {error && <p>{error}</p>}
+        {data.length > 0 ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Delete</th>
+                {columns.map((column, index) => (
+                  <th key={index}>{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <button onClick={deleteStock}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
+                      </svg>
+                    </button>
+                  </td>
+                  {columns.map((column, colIndex) => (
+                    <td key={colIndex}>{renderCellContent(item[column])}</td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex}>{item[column]}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Nenhum dado disponível</p>
-          )}
-        </div>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Nenhum dado disponível</p>
+        )}
+      </div>
     </div>
   );
 };

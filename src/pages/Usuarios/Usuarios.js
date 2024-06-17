@@ -1,25 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Paper from '@mui/material/Paper';
 import './usuariosStyle.css';
 import { SidebarContext } from '../../components/sidebar/SidebarContext.js';
-
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
 
 export default function Usuarios() {
   const { isSidebarActive } = useContext(SidebarContext);
@@ -27,13 +8,12 @@ export default function Usuarios() {
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
   
-  const fetchProdutos = async () => {
+  const fetchUsuarios = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('http://localhost:8080/usuarios', {
+      const response = await fetch('http://localhost:8080/auth', {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `${token}`,
         },
       });
@@ -55,61 +35,70 @@ export default function Usuarios() {
       setError('Erro na requisição');
     }
   };
+
   useEffect(() => {
-    fetchProdutos();
+    fetchUsuarios();
   }, []);
+
+  const updateUser = () => {
+    console.log("Updated");
+  }
+
+  const deleteUser = () => {
+    console.log("Deleted");
+  }
+
+  const renderCellContent = (content) => {
+    if (typeof content === 'object' && content !== null) {
+      return JSON.stringify(content);
+    }
+    return content;
+  };
+
   return (
-    <div className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
-        <h2>Usuários</h2>
-        {/* <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-            <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            </TableRow>
-            </TableHead>
-            <TableBody>
-            {rows.map((row) => (
-                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">{row.name}</TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                </TableRow>
-            ))}
-            </TableBody>
-        </Table>
-        </TableContainer> */}
-        <div>
-          {error && <p>{error}</p>}
-          {data.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  {columns.map((column, index) => (
-                    <th key={index}>{column}</th>
+    <div id='div-usuarios' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
+      <h2>Usuários</h2>
+      <div>
+        {error && <p>{error}</p>}
+        {data.length > 0 ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Update</th>
+                <th>Delete</th>
+                {columns.map((column, index) => (
+                  <th key={index}>{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <button onClick={updateUser}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/>
+                      </svg>
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={deleteUser}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
+                      </svg>
+                    </button>
+                  </td>
+                  {columns.map((column, colIndex) => (
+                    <td key={colIndex}>{renderCellContent(item[column])}</td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex}>{item[column]}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Nenhum dado disponível</p>
-          )}
-        </div>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Nenhum dado disponível</p>
+        )}
+      </div>
     </div>
   );
 };
