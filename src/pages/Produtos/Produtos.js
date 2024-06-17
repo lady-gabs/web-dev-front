@@ -47,6 +47,7 @@ export default function Produtos() {
             <table>
               <thead>
                 <tr>
+                  <th>update</th>
                   <th>delete</th>
                   {columns.map((column, index) => (
                     <th key={index}>{column}</th>
@@ -56,6 +57,7 @@ export default function Produtos() {
               <tbody>
                 {data.map((item, index) => (
                   <tr key={index}>
+                    <td>updating...</td>
                     <td>deleting...</td>
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{item[column]}</td>
