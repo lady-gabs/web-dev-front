@@ -3,7 +3,6 @@ import InputPassword from '../../components/login/inputPassword';
 import InputLogin from '../../components/login/inputLogin';
 import Button from '../../components/button/button';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";
 
 import './loginStyle.css';
 
@@ -33,20 +32,14 @@ function Login({ setAuthState }) {
             if (response.ok) {
                 const data = await response.json();
                 const token = data.token;
+                const role = data.role;
                 // Armazena o token em localStorage (ou sessionStorage)
                 localStorage.setItem('token', token);
-
-                // Decodifica o token para extrair o role
-                const decodedToken = jwtDecode(token); // não serve para nada
-                const userRoles = decodedToken.role; // Supondo que as roles estão no payload do token
-                                                     // Está retornando undefined
-                const userType = userRoles.includes('ROLE_ADMIN') ? 'admin' : 'client';
-
-                // Sucesso na autenticação
-                setAuthState({ isAuthenticated: true, userType: userType });
-                if (userType === '0') {
+                console.log(role)
+ 
+                if (role === 'ADMIN') {
                     navigate('/admin');
-                } else if (userType === '1') {
+                } else if (role === 'USER') {
                     navigate('/client');
                 } else {
                     setError('Tipo de usuário desconhecido.');
