@@ -41,7 +41,7 @@ export default function Produtos() {
   return (
     <div className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
         <h2>Produtos</h2>
-        <br></br>
+        <hr></hr>
         <div>
           {error && <p>{error}</p>}
           {data.length > 0 ? (
