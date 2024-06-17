@@ -12,3 +12,8 @@
     margin-left: 255px; /* Ajuste conforme o tamanho da barra lateral */
     width: 80% !important;
 }
+
+#div-produtos {
+    display: flex;
+    flex-direction: column;
+}

@@ -39,9 +39,8 @@ export default function Produtos() {
     fetchProdutos();
   }, []);
   return (
-    <div className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
+    <div id='div-produtos' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
         <h2>Produtos</h2>
-        <hr></hr>
         <div>
           {error && <p>{error}</p>}
           {data.length > 0 ? (
