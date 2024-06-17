@@ -33,7 +33,6 @@ export default function Produtos() {
       const response = await fetch('http://localhost:8080/produto', {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `${token}`,
         },
       });
