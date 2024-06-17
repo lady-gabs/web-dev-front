@@ -9,7 +9,7 @@
 }
 
 .with-sidebar {
-    margin-left: 255px; /* Ajuste conforme o tamanho da barra lateral */
+    margin-left: 255px !important; /* Ajuste conforme o tamanho da barra lateral */
     width: 80% !important;
 }
 

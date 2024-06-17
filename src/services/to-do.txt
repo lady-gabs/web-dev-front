@@ -1,1 +1,0 @@
-services para login, puxar produtos da api e fazer as operações, puxar estoque e puxar usuarios
