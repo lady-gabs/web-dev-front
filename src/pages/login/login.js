@@ -37,8 +37,9 @@ function Login({ setAuthState }) {
                 localStorage.setItem('token', token);
 
                 // Decodifica o token para extrair o role
-                const decodedToken = jwtDecode(token);
+                const decodedToken = jwtDecode(token); // não serve para nada
                 const userRoles = decodedToken.role; // Supondo que as roles estão no payload do token
+                                                     // Está retornando undefined
                 const userType = userRoles.includes('ROLE_ADMIN') ? 'admin' : 'client';
 
                 // Sucesso na autenticação
