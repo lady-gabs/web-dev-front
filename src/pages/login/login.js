@@ -37,7 +37,7 @@ function Login({ setAuthState }) {
                 localStorage.setItem('token', token);
 
                 // Atualiza o estado de autenticação
-                setAuthState({ isAuthenticated: true, userType: role.toLowerCase() });
+                setAuthState({ isAuthenticated: true, userType: role});
 
                 if (role === 'ADMIN') {
                     navigate('/admin');

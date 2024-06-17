@@ -21,8 +21,8 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login setAuthState={setAuthState} />} />
             <Route path="/" element={authState.isAuthenticated ? <Navigate replace to={`/${authState.userType}`} /> : <Navigate replace to="/login" />} />
-            <Route path="/admin/*" element={authState.isAuthenticated && authState.userType === 'admin' ? <MainApp /> : <Navigate replace to="/login" />} />
-            <Route path="/client/*" element={authState.isAuthenticated && authState.userType === 'client' ? <ClientApp /> : <Navigate replace to="/login" />} />
+            <Route path="/admin/*" element={authState.isAuthenticated && authState.userType === 'ADMIN' ? <MainApp /> : <Navigate replace to="/login" />} />
+            <Route path="/client/*" element={authState.isAuthenticated && authState.userType === 'USER' ? <ClientApp /> : <Navigate replace to="/login" />} />
           </Routes>
         </div>
       </Router>
