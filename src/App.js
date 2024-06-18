@@ -6,6 +6,7 @@ import Produtos from "./pages/Produtos/Produtos";
 import Usuarios from "./pages/Usuarios/Usuarios";
 import Estoque from "./pages/Estoque/Estoque";
 import Login from "./pages/login/login";
+import ClientProduct from "./pages/ClientProduct/ClientProduct";
 import { SidebarProvider } from "./components/sidebar/SidebarContext";
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
@@ -41,7 +42,6 @@ function MainApp() {
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="produtos" element={<Produtos />} />
           <Route path="estoque" element={<Estoque />} />
-          {/* Adicione mais rotas conforme necessário */}
         </Routes>
       </div>
     </>
@@ -56,8 +56,7 @@ function ClientApp() {
       <div className='content'>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="produtos" element={<Produtos />} />
-          {/* Adicione mais rotas conforme necessário */}
+          <Route path="produtos" element={<ClientProduct />} />
         </Routes>
       </div>
     </>
