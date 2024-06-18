@@ -93,7 +93,6 @@ export default function Produtos() {
       nome: editProduct.nome,
       preco: editProduct.preco,
       quantidade: editProduct.quantidade,
-      estoqueId: editProduct.estoqueId,
     };
 
     try {
@@ -124,14 +123,13 @@ export default function Produtos() {
 
   const deleteProduct = async (productName, estoqueId) => {
     const token = localStorage.getItem('token');
-    const payload = {
-      estoqueId: estoqueId,
-    };
+    const payload = { estoqueId: estoqueId };
 
     try {
       const response = await fetch(`http://localhost:8080/produto/${productName}`, {
         method: 'DELETE',
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `${token}`,
         },
         body: JSON.stringify(payload),
