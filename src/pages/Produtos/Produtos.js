@@ -8,11 +8,11 @@ export default function Produtos() {
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
   const [newProduct, setNewProduct] = useState({ nome: '', preco: '', quantidade: '', estoqueId: '' });
-  const [editProduct, setEditProduct] = useState({ nome: '', preco: '', quantidade: '' });
+  const [editProduct, setEditProduct] = useState({ id: '', nome: '', preco: '', quantidade: '', estoqueId: '' });
   const [isInsertModalOpen, setIsInsertModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const role = localStorage.getItem('role');
-
+  
   const fetchProdutos = async () => {
     const token = localStorage.getItem('token');
     try {
@@ -94,6 +94,7 @@ export default function Produtos() {
       nome: editProduct.nome,
       preco: editProduct.preco,
       quantidade: editProduct.quantidade,
+      estoqueId: editProduct.estoqueId,
     };
 
     try {
@@ -109,7 +110,7 @@ export default function Produtos() {
       if (response.ok) {
         const updatedProduct = await response.json();
         setData(prevData => prevData.map(product => (product.id === updatedProduct.id ? updatedProduct : product)));
-        setEditProduct({ id: '', nome: '', preco: '', quantidade: '' }); // Limpa o formulário
+        setEditProduct({ id: '', nome: '', preco: '', quantidade: '', estoqueId: '' }); // Limpa o formulário
         setIsEditModalOpen(false); // Fecha o modal após a atualização
       } else {
         const errorText = await response.text();
@@ -125,7 +126,7 @@ export default function Produtos() {
   const deleteProduct = async (productId, estoqueId) => {
     const token = localStorage.getItem('token');
     const payload = { estoqueId: estoqueId };
-    
+
     try {
       const response = await fetch(`http://localhost:8080/produto/${productId}`, {
         method: 'DELETE',
@@ -157,121 +158,129 @@ export default function Produtos() {
 
   return (
     <div id='div-produtos' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
-        <h2>Produtos</h2>
-        {role === 'ADMIN' && (
-          <button onClick={() => setIsInsertModalOpen(true)}>Inserir novo produto</button>
-        )}
-        {isInsertModalOpen && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setIsInsertModalOpen(false)}>&times;</span>
-              <form onSubmit={(e) => { e.preventDefault(); insertProduct(); }}>
-                <input 
-                  type="text" 
-                  name="nome" 
-                  value={newProduct.nome} 
-                  onChange={(e) => handleInputChange(e, setNewProduct)} 
-                  placeholder="Nome" 
-                  required 
-                />
-                <input 
-                  type="number" 
-                  name="preco" 
-                  value={newProduct.preco} 
-                  onChange={(e) => handleInputChange(e, setNewProduct)} 
-                  placeholder="Preço" 
-                  required 
-                />
-                <input 
-                  type="number" 
-                  name="quantidade" 
-                  value={newProduct.quantidade} 
-                  onChange={(e) => handleInputChange(e, setNewProduct)} 
-                  placeholder="Quantidade" 
-                  required 
-                />
-                <input 
-                  type="text" 
-                  name="estoqueId" 
-                  value={newProduct.estoqueId} 
-                  onChange={(e) => handleInputChange(e, setNewProduct)} 
-                  placeholder="Estoque ID" 
-                  required 
-                />
-                <button type="submit">Inserir</button>
-              </form>
-            </div>
+      <h2>Produtos</h2>
+      {role === 'ADMIN' && (
+        <button onClick={() => setIsInsertModalOpen(true)}>Inserir novo produto</button>
+      )}
+      {isInsertModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setIsInsertModalOpen(false)}>&times;</span>
+            <form onSubmit={(e) => { e.preventDefault(); insertProduct(); }}>
+              <input 
+                type="text" 
+                name="nome" 
+                value={newProduct.nome} 
+                onChange={(e) => handleInputChange(e, setNewProduct)} 
+                placeholder="Nome" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="preco" 
+                value={newProduct.preco} 
+                onChange={(e) => handleInputChange(e, setNewProduct)} 
+                placeholder="Preço" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="quantidade" 
+                value={newProduct.quantidade} 
+                onChange={(e) => handleInputChange(e, setNewProduct)} 
+                placeholder="Quantidade" 
+                required 
+              />
+              <input 
+                type="text" 
+                name="estoqueId" 
+                value={newProduct.estoqueId} 
+                onChange={(e) => handleInputChange(e, setNewProduct)} 
+                placeholder="Estoque ID" 
+                required 
+              />
+              <button type="submit">Inserir</button>
+            </form>
           </div>
-        )}
-        {isEditModalOpen && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setIsEditModalOpen(false)}>&times;</span>
-              <form onSubmit={(e) => { e.preventDefault(); updateProduct(); }}>
-                <input 
-                  type="text" 
-                  name="nome" 
-                  value={editProduct.nome} 
-                  onChange={(e) => handleInputChange(e, setEditProduct)} 
-                  placeholder="Nome" 
-                  required 
-                />
-                <input 
-                  type="number" 
-                  name="preco" 
-                  value={editProduct.preco} 
-                  onChange={(e) => handleInputChange(e, setEditProduct)} 
-                  placeholder="Preço" 
-                  required 
-                />
-                <input 
-                  type="number" 
-                  name="quantidade" 
-                  value={editProduct.quantidade} 
-                  onChange={(e) => handleInputChange(e, setEditProduct)} 
-                  placeholder="Quantidade" 
-                  required 
-                />
-                <button type="submit">Atualizar</button>
-              </form>
-            </div>
+        </div>
+      )}
+      {isEditModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setIsEditModalOpen(false)}>&times;</span>
+            <form onSubmit={(e) => { e.preventDefault(); updateProduct(); }}>
+              <input 
+                type="text" 
+                name="nome" 
+                value={editProduct.nome} 
+                onChange={(e) => handleInputChange(e, setEditProduct)} 
+                placeholder="Nome" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="preco" 
+                value={editProduct.preco} 
+                onChange={(e) => handleInputChange(e, setEditProduct)} 
+                placeholder="Preço" 
+                required 
+              />
+              <input 
+                type="number" 
+                name="quantidade" 
+                value={editProduct.quantidade} 
+                onChange={(e) => handleInputChange(e, setEditProduct)} 
+                placeholder="Quantidade" 
+                required 
+              />
+              <input 
+                type="text" 
+                name="estoqueId" 
+                value={editProduct.estoqueId} 
+                onChange={(e) => handleInputChange(e, setEditProduct)} 
+                placeholder="Estoque ID" 
+                required 
+              />
+              <button type="submit">Atualizar</button>
+            </form>
           </div>
-        )}
-        <div>
-          {error && <p>{error}</p>}
-          {data.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  {role === 'ADMIN' && <th>Update</th>}
-                  {role === 'ADMIN' && <th>Delete</th>}
-                  {columns.map((column, index) => (
-                    <th key={index}>{column}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    {role === 'ADMIN' && (
-                      <td>
-                        <button onClick={() => {
-                          setEditProduct({
-                            id: item.id,
-                            nome: item.nome,
-                            preco: item.preco,
-                            quantidade: item.quantidade,
-                            estoqueId: item.estoqueId
-                          });
-                          setIsEditModalOpen(true);
-                        }}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/>
-                          </svg>
-                        </button>
-                      </td>
-                    )}
-                    {role === 'ADMIN' && (
+        </div>
+      )}
+      <div>
+        {error && <p>{error}</p>}
+        {data.length > 0 ? (
+          <table>
+            <thead>
+              <tr>
+                {role === 'ADMIN' && <th>Update</th>}
+                {role === 'ADMIN' && <th>Delete</th>}
+                {columns.map((column, index) => (
+                  <th key={index}>{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  {role === 'ADMIN' && (
+                    <td>
+                      <button onClick={() => {
+                        setEditProduct({
+                          id: item.id,
+                          nome: item.nome,
+                          preco: item.preco,
+                          quantidade: item.quantidade,
+                          estoqueId: item.estoqueId
+                        });
+                        setIsEditModalOpen(true);
+                      }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/>
+                        </svg>
+                      </button>
+                    </td>
+                  )}
+                  {role === 'ADMIN' && (
                     <td>
                       <button onClick={() => deleteProduct(item.id, item.estoqueId)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -279,18 +288,18 @@ export default function Produtos() {
                         </svg>
                       </button>
                     </td>
-                    )}
-                    {columns.map((column, colIndex) => (
+                  )}
+                  {columns.map((column, colIndex) => (
                     <td key={colIndex}>{renderCellContent(item[column])}</td>
                   ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Nenhum dado disponível</p>
-          )}
-        </div>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Nenhum dado disponível</p>
+        )}
+      </div>
     </div>
   );
 }
