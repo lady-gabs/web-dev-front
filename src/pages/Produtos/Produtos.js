@@ -8,10 +8,9 @@ export default function Produtos() {
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
   const [newProduct, setNewProduct] = useState({ nome: '', preco: '', quantidade: '', estoqueId: '' });
-  const [editProduct, setEditProduct] = useState({ id: '', nome: '', preco: '', quantidade: '', estoqueId: '' });
+  const [editProduct, setEditProduct] = useState({ nome: '', preco: '', quantidade: '' });
   const [isInsertModalOpen, setIsInsertModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const role = localStorage.getItem('role');
   
   const fetchProdutos = async () => {
     const token = localStorage.getItem('token');
@@ -45,9 +44,9 @@ export default function Produtos() {
     fetchProdutos();
   }, []);
 
-  const handleInputChange = (e, setFunction) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFunction(prevState => ({
+    setNewProduct(prevState => ({
       ...prevState,
       [name]: value
     }));
@@ -94,7 +93,6 @@ export default function Produtos() {
       nome: editProduct.nome,
       preco: editProduct.preco,
       quantidade: editProduct.quantidade,
-      estoqueId: editProduct.estoqueId,
     };
 
     try {
@@ -110,7 +108,7 @@ export default function Produtos() {
       if (response.ok) {
         const updatedProduct = await response.json();
         setData(prevData => prevData.map(product => (product.id === updatedProduct.id ? updatedProduct : product)));
-        setEditProduct({ id: '', nome: '', preco: '', quantidade: '', estoqueId: '' }); // Limpa o formulário
+        setEditProduct({ id: '', nome: '', preco: '', quantidade: ''}); // Limpa o formulário
         setIsEditModalOpen(false); // Fecha o modal após a atualização
       } else {
         const errorText = await response.text();
@@ -123,12 +121,12 @@ export default function Produtos() {
     }
   };
 
-  const deleteProduct = async (productId, estoqueId) => {
+  const deleteProduct = async (productName, estoqueId) => {
     const token = localStorage.getItem('token');
     const payload = { estoqueId: estoqueId };
-
+    
     try {
-      const response = await fetch(`http://localhost:8080/produto/${productId}`, {
+      const response = await fetch(`http://localhost:8080/produto/${productName}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +136,7 @@ export default function Produtos() {
       });
 
       if (response.ok) {
-        setData(prevData => prevData.filter(product => product.id !== productId));
+        setData(prevData => prevData.filter(product => product.nome !== productName));
       } else {
         console.error('Erro ao deletar o produto.');
         setError('Erro ao deletar o produto.');
@@ -158,119 +156,107 @@ export default function Produtos() {
 
   return (
     <div id='div-produtos' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
-      <h2>Produtos</h2>
-      {role === 'ADMIN' && (
+        <h2>Produtos</h2>
         <button onClick={() => setIsInsertModalOpen(true)}>Inserir novo produto</button>
-      )}
-      {isInsertModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setIsInsertModalOpen(false)}>&times;</span>
-            <form onSubmit={(e) => { e.preventDefault(); insertProduct(); }}>
-              <input 
-                type="text" 
-                name="nome" 
-                value={newProduct.nome} 
-                onChange={(e) => handleInputChange(e, setNewProduct)} 
-                placeholder="Nome" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="preco" 
-                value={newProduct.preco} 
-                onChange={(e) => handleInputChange(e, setNewProduct)} 
-                placeholder="Preço" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="quantidade" 
-                value={newProduct.quantidade} 
-                onChange={(e) => handleInputChange(e, setNewProduct)} 
-                placeholder="Quantidade" 
-                required 
-              />
-              <input 
-                type="text" 
-                name="estoqueId" 
-                value={newProduct.estoqueId} 
-                onChange={(e) => handleInputChange(e, setNewProduct)} 
-                placeholder="Estoque ID" 
-                required 
-              />
-              <button type="submit">Inserir</button>
-            </form>
+        {isInsertModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setIsInsertModalOpen(false)}>&times;</span>
+              <form onSubmit={(e) => { e.preventDefault(); insertProduct(); }}>
+                <input 
+                  type="text" 
+                  name="nome" 
+                  value={newProduct.nome} 
+                  onChange={(e) => handleInputChange(e, setNewProduct)} 
+                  placeholder="Nome" 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  name="preco" 
+                  value={newProduct.preco} 
+                  onChange={(e) => handleInputChange(e, setNewProduct)} 
+                  placeholder="Preço" 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  name="quantidade" 
+                  value={newProduct.quantidade} 
+                  onChange={(e) => handleInputChange(e, setNewProduct)} 
+                  placeholder="Quantidade" 
+                  required 
+                />
+                <input 
+                  type="text" 
+                  name="estoqueId" 
+                  value={newProduct.estoqueId} 
+                  onChange={(e) => handleInputChange(e, setNewProduct)} 
+                  placeholder="Estoque ID" 
+                  required 
+                />
+                <button type="submit">Inserir</button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-      {isEditModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setIsEditModalOpen(false)}>&times;</span>
-            <form onSubmit={(e) => { e.preventDefault(); updateProduct(); }}>
-              <input 
-                type="text" 
-                name="nome" 
-                value={editProduct.nome} 
-                onChange={(e) => handleInputChange(e, setEditProduct)} 
-                placeholder="Nome" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="preco" 
-                value={editProduct.preco} 
-                onChange={(e) => handleInputChange(e, setEditProduct)} 
-                placeholder="Preço" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="quantidade" 
-                value={editProduct.quantidade} 
-                onChange={(e) => handleInputChange(e, setEditProduct)} 
-                placeholder="Quantidade" 
-                required 
-              />
-              <input 
-                type="text" 
-                name="estoqueId" 
-                value={editProduct.estoqueId} 
-                onChange={(e) => handleInputChange(e, setEditProduct)} 
-                placeholder="Estoque ID" 
-                required 
-              />
-              <button type="submit">Atualizar</button>
-            </form>
+        )}
+        {isEditModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setIsEditModalOpen(false)}>&times;</span>
+              <form onSubmit={(e) => { e.preventDefault(); updateProduct(); }}>
+                <input 
+                  type="text" 
+                  name="nome" 
+                  value={editProduct.nome} 
+                  onChange={(e) => handleInputChange(e, setEditProduct)} 
+                  placeholder="Nome" 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  name="preco" 
+                  value={editProduct.preco} 
+                  onChange={(e) => handleInputChange(e, setEditProduct)} 
+                  placeholder="Preço" 
+                  required 
+                />
+                <input 
+                  type="number" 
+                  name="quantidade" 
+                  value={editProduct.quantidade} 
+                  onChange={(e) => handleInputChange(e, setEditProduct)} 
+                  placeholder="Quantidade" 
+                  required 
+                />
+                <button type="submit">Atualizar</button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-      <div>
-        {error && <p>{error}</p>}
-        {data.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                {role === 'ADMIN' && <th>Update</th>}
-                {role === 'ADMIN' && <th>Delete</th>}
-                {columns.map((column, index) => (
-                  <th key={index}>{column}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  {role === 'ADMIN' && (
+        )}
+        <div>
+          {error && <p>{error}</p>}
+          {data.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Update</th>
+                  <th>Delete</th>
+                  {columns.map((column, index) => (
+                    <th key={index}>{column}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
                     <td>
                       <button onClick={() => {
                         setEditProduct({
                           id: item.id,
                           nome: item.nome,
                           preco: item.preco,
-                          quantidade: item.quantidade,
-                          estoqueId: item.estoqueId
+                          quantidade: item.quantidade
                         });
                         setIsEditModalOpen(true);
                       }}>
@@ -279,27 +265,24 @@ export default function Produtos() {
                         </svg>
                       </button>
                     </td>
-                  )}
-                  {role === 'ADMIN' && (
                     <td>
-                      <button onClick={() => deleteProduct(item.id, item.estoqueId)}>
+                      <button onClick={() => deleteProduct(item.nome, item.estoqueId)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                           <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
                         </svg>
                       </button>
                     </td>
-                  )}
-                  {columns.map((column, colIndex) => (
+                    {columns.map((column, colIndex) => (
                     <td key={colIndex}>{renderCellContent(item[column])}</td>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>Nenhum dado disponível</p>
-        )}
-      </div>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>Nenhum dado disponível</p>
+          )}
+        </div>
     </div>
   );
-}
+};
