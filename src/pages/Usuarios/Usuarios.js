@@ -173,7 +173,7 @@ export default function Usuarios() {
     <div id='div-usuarios' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
       <h2>Usuários</h2>
 
-      <button onClick={() => setIsModalOpen(true)}>Inserir novo usuário</button>
+      <button class='btn-user' onClick={() => setIsModalOpen(true)}>Inserir novo usuário</button>
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
@@ -214,10 +214,10 @@ export default function Usuarios() {
                       placeholder="Telefone"
                       required
                     />
-                    <button type="button" onClick={() => removeTelefoneField(index)}>Remover</button>
+                    <button class='btn-user' type="button" onClick={() => removeTelefoneField(index)}>Remover</button>
                   </div>
                 ))}
-                <button type="button" onClick={addTelefoneField}>Adicionar Telefone</button>
+                <button class='btn-user' type="button" onClick={addTelefoneField}>Adicionar Telefone</button>
               </div>
               <input 
                 type="text" 
@@ -234,7 +234,7 @@ export default function Usuarios() {
                 placeholder="CNPJ" 
               />
               {formError && <p style={{ color: 'red' }}>{formError}</p>}
-              <button type="submit">Enviar</button>
+              <button class='btn-user' type="submit">Enviar</button>
             </form>
           </div>
         </div>
