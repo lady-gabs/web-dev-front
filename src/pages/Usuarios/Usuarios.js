@@ -102,7 +102,7 @@ export default function Usuarios() {
     console.log('Payload:', payload); // Log para depuração
 
     try {
-      const response = await fetch('http://localhost:8080/auth', {
+      const response = await fetch('http://localhost:8080/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
