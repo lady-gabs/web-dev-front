@@ -54,7 +54,7 @@ export default function Estoque() {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/novo-estoque', {
+      const response = await fetch('http://localhost:8080/estoque/novo-estoque', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function Estoque() {
   const deleteStock = async (stockId) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:8080/remover-estoque/${stockId}`, {
+      const response = await fetch(`http://localhost:8080/estoque/remover-estoque/${stockId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `${token}`,
