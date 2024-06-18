@@ -18,3 +18,10 @@
     flex-direction: column;
     margin-left: 5px;
 }
+
+.btn-user {
+    border: 1px solid #0a135e;
+    background-color: #0a135e;
+    border-radius: 5px;
+    color: #fff;
+}

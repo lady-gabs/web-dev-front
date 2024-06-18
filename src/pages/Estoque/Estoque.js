@@ -111,7 +111,7 @@ export default function Estoque() {
   return (
     <div id='div-estoque' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
       <h2>Estoque</h2>
-      <button onClick={() => setIsModalOpen(true)}>Inserir novo estoque</button>
+      <button class='btn-user' onClick={() => setIsModalOpen(true)}>Inserir novo estoque</button>
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
@@ -125,7 +125,7 @@ export default function Estoque() {
                 placeholder="Nome do novo estoque" 
                 required 
               />
-              <button type="submit">Inserir</button>
+              <button class='btn-user' type="submit">Enviar</button>
             </form>
           </div>
         </div>

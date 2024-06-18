@@ -14,7 +14,7 @@ export default function Usuarios() {
   const fetchUsuarios = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('http://localhost:8080/auth', {
+      const response = await fetch('http://localhost:8080/auth/usuarios', {
         method: 'GET',
         headers: {
           'Authorization': `${token}`,

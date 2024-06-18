@@ -123,12 +123,12 @@ export default function Produtos() {
     }
   };
 
-  const deleteProduct = async (productId, estoqueId) => {
+  const deleteProduct = async (nome, estoqueId) => {
     const token = localStorage.getItem('token');
-    const payload = { estoqueId: estoqueId };
+    const payload = { nome, estoqueId };
 
     try {
-      const response = await fetch(`http://localhost:8080/produto/${productId}`, {
+      const response = await fetch(`http://localhost:8080/produto/${nome}`, { // URL modificada para usar o nome
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ export default function Produtos() {
       });
 
       if (response.ok) {
-        setData(prevData => prevData.filter(product => product.id !== productId));
+        setData(prevData => prevData.filter(product => product.nome !== nome));
       } else {
         console.error('Erro ao deletar o produto.');
         setError('Erro ao deletar o produto.');
@@ -148,6 +148,7 @@ export default function Produtos() {
       setError('Erro na requisição');
     }
   };
+
 
   const renderCellContent = (content) => {
     if (typeof content === 'object' && content !== null) {
@@ -160,7 +161,7 @@ export default function Produtos() {
     <div id='div-produtos' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
       <h2>Produtos</h2>
       {role === 'ADMIN' && (
-        <button onClick={() => setIsInsertModalOpen(true)}>Inserir novo produto</button>
+        <button class='btn-user' onClick={() => setIsInsertModalOpen(true)}>Inserir novo produto</button>
       )}
       {isInsertModalOpen && (
         <div className="modal">
@@ -199,7 +200,7 @@ export default function Produtos() {
                 placeholder="Estoque ID" 
                 required 
               />
-              <button type="submit">Inserir</button>
+              <button class='btn-user' type="submit">Enviar</button>
             </form>
           </div>
         </div>
@@ -282,7 +283,7 @@ export default function Produtos() {
                   )}
                   {role === 'ADMIN' && (
                     <td>
-                      <button onClick={() => deleteProduct(item.id, item.estoqueId)}>
+                      <button onClick={() => deleteProduct(item.nome, item.estoqueId)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                           <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
                         </svg>
@@ -303,3 +304,4 @@ export default function Produtos() {
     </div>
   );
 }
+ 
