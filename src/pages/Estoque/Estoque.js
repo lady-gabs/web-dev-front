@@ -7,8 +7,9 @@ export default function Estoque() {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
-  const [newStock, setNewStock] = useState({ nome: '', preco: '', quantidade: '', estoqueId: '' });
+  const [newStockName, setNewStockName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
 
   const fetchEstoque = async () => {
     const token = localStorage.getItem('token');
@@ -43,24 +44,17 @@ export default function Estoque() {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewStock(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setNewStockName(e.target.value);
   };
 
-  const insertStock = async () => {
+  const insertNewStock = async () => {
     const token = localStorage.getItem('token');
     const payload = {
-      nome: newStock.nome,
-      preco: newStock.preco,
-      quantidade: newStock.quantidade,
-      estoqueId: newStock.estoqueId,
+      nome: newStockName,
     };
 
     try {
-      const response = await fetch('http://localhost:8080/estoque', {
+      const response = await fetch('http://localhost:8080/novo-estoque', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,9 +64,9 @@ export default function Estoque() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setData(prevData => [...prevData, data]);
-        setNewStock({ nome: '', preco: '', quantidade: '', estoqueId: '' }); // Limpa o formulário
+        const newData = await response.json();
+        setData(prevData => [...prevData, newData]);
+        setNewStockName(''); // Limpa o formulário
         setIsModalOpen(false); // Fecha o modal após a inserção
       } else {
         const errorText = await response.text();
@@ -88,7 +82,7 @@ export default function Estoque() {
   const deleteStock = async (stockId) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:8080/estoque/remover-estoque/${stockId}`, {
+      const response = await fetch(`http://localhost:8080/remover-estoque/${stockId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `${token}`,
@@ -122,37 +116,13 @@ export default function Estoque() {
         <div className="modal">
           <div className="modal-content">
             <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
-            <form onSubmit={(e) => { e.preventDefault(); insertStock(); }}>
+            <form onSubmit={(e) => { e.preventDefault(); insertNewStock(); }}>
               <input 
                 type="text" 
                 name="nome" 
-                value={newStock.nome} 
+                value={newStockName} 
                 onChange={handleInputChange} 
-                placeholder="Nome" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="preco" 
-                value={newStock.preco} 
-                onChange={handleInputChange} 
-                placeholder="Preço" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="quantidade" 
-                value={newStock.quantidade} 
-                onChange={handleInputChange} 
-                placeholder="Quantidade" 
-                required 
-              />
-              <input 
-                type="number" 
-                name="estoqueId" 
-                value={newStock.estoqueId} 
-                onChange={handleInputChange} 
-                placeholder="Estoque ID" 
+                placeholder="Nome do novo estoque" 
                 required 
               />
               <button type="submit">Inserir</button>
