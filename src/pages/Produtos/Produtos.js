@@ -121,12 +121,12 @@ export default function Produtos() {
     }
   };
 
-  const deleteProduct = async (item) => {
+  const deleteProduct = async (productName, estoqueId) => {
     const token = localStorage.getItem('token');
-    const payload = { estoqueId: item.estoqueId };
+    const payload = { estoqueId: estoqueId };
     
     try {
-      const response = await fetch(`http://localhost:8080/produto/${item.nome}`, {
+      const response = await fetch(`http://localhost:8080/produto/${productName}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ export default function Produtos() {
       });
 
       if (response.ok) {
-        setData(prevData => prevData.filter(product => product.nome !== item.nome));
+        setData(prevData => prevData.filter(product => product.nome !== productName));
       } else {
         console.error('Erro ao deletar o produto.');
         setError('Erro ao deletar o produto.');
@@ -252,7 +252,12 @@ export default function Produtos() {
                   <tr key={index}>
                     <td>
                       <button onClick={() => {
-                        setEditProduct(item);
+                        setEditProduct({
+                          id: item.id,
+                          nome: item.nome,
+                          preco: item.preco,
+                          quantidade: item.quantidade
+                        });
                         setIsEditModalOpen(true);
                       }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -261,7 +266,7 @@ export default function Produtos() {
                       </button>
                     </td>
                     <td>
-                      <button onClick={() => deleteProduct(item)}>
+                      <button onClick={() => deleteProduct(item.nome, item.estoqueId)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                           <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
                         </svg>
