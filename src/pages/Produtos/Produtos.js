@@ -122,10 +122,10 @@ export default function Produtos() {
     }
   };
 
-  const deleteProduct = async (productName, stockId) => {
+  const deleteProduct = async (productName, estoqueId) => {
     const token = localStorage.getItem('token');
     const payload = {
-      estoqueId: stockId,
+      estoqueId: estoqueId,
     };
 
     try {
@@ -140,8 +140,8 @@ export default function Produtos() {
       if (response.ok) {
         setData(prevData => prevData.filter(product => product.nome !== productName));
       } else {
-        console.error('Erro ao deletar o estoque.');
-        setError('Erro ao deletar o estoque.');
+        console.error('Erro ao deletar o produto.');
+        setError('Erro ao deletar o produto.');
       }
     } catch (error) {
       console.error('Erro na requisição:', error);
