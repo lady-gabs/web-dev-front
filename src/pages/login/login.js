@@ -35,6 +35,7 @@ function Login({ setAuthState }) {
                 const role = data.role;
                 // Armazena o token em localStorage (ou sessionStorage)
                 localStorage.setItem('token', token);
+                localStorage.setItem('role', role);
 
                 // Atualiza o estado de autenticação
                 setAuthState({ isAuthenticated: true, userType: role});
