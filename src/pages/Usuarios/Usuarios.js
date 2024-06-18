@@ -8,8 +8,8 @@ export default function Usuarios() {
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
   const [newUser, setNewUser] = useState({ login: '', nome: '', password: '', cpf: '', cnpj: '' , telefones: ['']});
-  // const [newUser, setNewUser] = useState({ nome: '', email: '', senha: '', telefone: '', cpf: '', cnpj: '' });
   const [formError, setFormError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchUsuarios = async () => {
     const token = localStorage.getItem('token');
@@ -91,16 +91,16 @@ export default function Usuarios() {
 
     const token = localStorage.getItem('token');
     const payload = {
-      login: newUser.email, // Assuming email is used as login
+      login: newUser.login, // Assuming email is used as login
       nome: newUser.nome,
-      password: newUser.senha,
+      password: newUser.password,
       cpf: newUser.cpf,
       cnpj: newUser.cnpj,
       telefones: newUser.telefones,
     };
 
     try {
-      const response = await fetch('http://localhost:8080/auth', {
+      const response = await fetch('http://localhost:8080/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -155,64 +155,74 @@ export default function Usuarios() {
   return (
     <div id='div-usuarios' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
       <h2>Usuários</h2>
-      <form onSubmit={(e) => { e.preventDefault(); insertNewUser(); }}>
-        <input 
-          type="text" 
-          name="nome" 
-          value={newUser.nome} 
-          onChange={handleInputChange} 
-          placeholder="Nome" 
-          required 
-        />
-        <input 
-          type="email" 
-          name="email" 
-          value={newUser.login} 
-          onChange={handleInputChange} 
-          placeholder="Email" 
-          required 
-        />
-        <input 
-          type="password" 
-          name="senha" 
-          value={newUser.password} 
-          onChange={handleInputChange} 
-          placeholder="Senha" 
-          required 
-        />
-        <div>
-          <label>Telefones:</label>
-          {newUser.telefones.map((telefone, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                value={telefone}
-                onChange={(e) => handleTelefoneChange(e, index)}
-                placeholder="Telefone"
-                required
+
+      <button onClick={() => setIsModalOpen(true)}>Inserir novo usuário</button>
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
+            <form onSubmit={(e) => { e.preventDefault(); insertNewUser(); }}>
+              <input 
+                type="text" 
+                name="nome" 
+                value={newUser.nome} 
+                onChange={handleInputChange} 
+                placeholder="Nome" 
+                required 
               />
-              <button type="button" onClick={() => removeTelefoneField(index)}>Remover</button>
-            </div>
-          ))}
-          <button type="button" onClick={addTelefoneField}>Adicionar Telefone</button>
+              <input 
+                type="email" 
+                name="login" 
+                value={newUser.login} 
+                onChange={handleInputChange} 
+                placeholder="Email" 
+                required 
+              />
+              <input 
+                type="password" 
+                name="password" 
+                value={newUser.password} 
+                onChange={handleInputChange} 
+                placeholder="Senha" 
+                required 
+              />
+              <div>
+                <label>Telefones:</label>
+                {newUser.telefones.map((telefone, index) => (
+                  <div key={index}>
+                    <input
+                      type="text"
+                      value={telefone}
+                      onChange={(e) => handleTelefoneChange(e, index)}
+                      placeholder="Telefone"
+                      required
+                    />
+                    <button type="button" onClick={() => removeTelefoneField(index)}>Remover</button>
+                  </div>
+                ))}
+                <button type="button" onClick={addTelefoneField}>Adicionar Telefone</button>
+              </div>
+              <input 
+                type="text" 
+                name="cpf" 
+                value={newUser.cpf} 
+                onChange={handleInputChange} 
+                placeholder="CPF" 
+              />
+              <input 
+                type="text" 
+                name="cnpj" 
+                value={newUser.cnpj} 
+                onChange={handleInputChange} 
+                placeholder="CNPJ" 
+              />
+              {formError && <p style={{ color: 'red' }}>{formError}</p>}
+              <button type="submit">Enviar</button>
+            </form>
+          </div>
         </div>
-        <input 
-          type="text" 
-          name="cpf" 
-          value={newUser.cpf} 
-          onChange={handleInputChange} 
-          placeholder="CPF" 
-        />
-        <input 
-          type="text" 
-          name="cnpj" 
-          value={newUser.cnpj} 
-          onChange={handleInputChange} 
-          placeholder="CNPJ" 
-        />
-        {formError && <p style={{ color: 'red' }}>{formError}</p>}
-        <button type="submit">Inserir novo usuário</button>
-      </form>
+      )}
+
       <div>
         {error && <p>{error}</p>}
         {data.length > 0 ? (
