@@ -108,7 +108,7 @@ export default function Produtos() {
       if (response.ok) {
         const updatedProduct = await response.json();
         setData(prevData => prevData.map(product => (product.id === updatedProduct.id ? updatedProduct : product)));
-        setEditProduct({ id: '', nome: '', preco: '', quantidade: '', estoqueId: '' }); // Limpa o formulário
+        setEditProduct({ id: '', nome: '', preco: '', quantidade: ''}); // Limpa o formulário
         setIsEditModalOpen(false); // Fecha o modal após a atualização
       } else {
         const errorText = await response.text();
