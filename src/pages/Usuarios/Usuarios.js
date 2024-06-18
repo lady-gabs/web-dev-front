@@ -91,7 +91,7 @@ export default function Usuarios() {
 
     const token = localStorage.getItem('token');
     const payload = {
-      login: newUser.login, // Assuming email is used as login
+      login: newUser.login,
       nome: newUser.nome,
       password: newUser.password,
       cpf: newUser.cpf,
@@ -99,8 +99,10 @@ export default function Usuarios() {
       telefones: newUser.telefones,
     };
 
+    console.log('Payload:', payload); // Log para depuração
+
     try {
-      const response = await fetch('http://localhost:8080/auth/register', {
+      const response = await fetch('http://localhost:8080/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,11 +112,26 @@ export default function Usuarios() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setData(prevData => [...prevData, data]);
-        setNewUser({ login: '', nome: '', password: '', cpf: '', cnpj: '' , telefones: [''] }); // Limpa o formulário
+        let data;
+        const responseText = await response.text();
+        if (responseText) {
+          try {
+            data = JSON.parse(responseText);
+          } catch (jsonError) {
+            console.error('Erro ao processar o JSON da resposta:', jsonError);
+            setError('Erro ao processar a resposta do servidor.');
+            return;
+          }
+        }
+        
+        if (data) {
+          setData(prevData => [...prevData, data]);
+        }
+        setNewUser({ login: '', nome: '', password: '', cpf: '', cnpj: '', telefones: [''] }); // Limpa o formulário
+        setIsModalOpen(false); // Fecha o modal após a inserção
       } else {
-        console.error('Erro ao inserir o usuário.');
+        const errorText = await response.text();
+        console.error('Erro ao inserir o usuário:', errorText);
         setError('Erro ao inserir o usuário.');
       }
     } catch (error) {
