@@ -44,6 +44,10 @@ export default function Estoque() {
     console.log("Deleted");
   }
 
+  const insertStock = () => {
+    console.log("Inserted");
+  }
+
   const renderCellContent = (content) => {
     if (typeof content === 'object' && content !== null) {
       return JSON.stringify(content);
@@ -54,6 +58,7 @@ export default function Estoque() {
   return (
     <div id='div-estoque' className={`table ${isSidebarActive ? 'with-sidebar' : ''}`}>
       <h2>Estoque</h2>
+      <button onClick={insertStock}>Inserir novo estoque</button>
       <div>
         {error && <p>{error}</p>}
         {data.length > 0 ? (

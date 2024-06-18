@@ -12,3 +12,9 @@
     margin-left: 255px; /* Ajuste conforme o tamanho da barra lateral */
     width: 80% !important;
 }
+
+#div-estoque {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
